@@ -30,15 +30,36 @@ class unitest(unittest.TestCase):
         Ans = False
         self.assertEqual(Solution().isMatch(s,p),Ans);
         self.assertEqual(Solution().isMatch(k,g),Ans);
+    def testStar(self):
+        s = "aa"
+        p = "a*"
+        Ans = True
+        self.assertEqual(Solution().isMatch(s,p),Ans);
 
 class Solution():
     def isMatch(self, s, p):
         s = s[::-1]
         p = p[::-1]
-        for i,j in itertools.zip_longest(range(len(s)), range(len(p))):
-            if i is None or j is None or s[i] == "*" or s[i] == "." or (s[i] != p[j] and p[j] != "."):
+        i, j = 0, 0
+        while i < len(s) and j < len(p):
+            while j < len(p) and p[j] == "*":
+                j += 1
+                temp = p[j]
+                if j == len(p):
+                    return False
+                if i is not None and (s[i] == "*" or s[i] != p[j]):
+                    return False
+                while i < len(s)-1 and s[i] == temp:
+                    i += 1
+                while j < len(p)-1 and p[j] == temp:
+                    j += 1
+            if s[i] == "*" or s[i] == "." or (s[i] != p[j] and p[j] != "."):
                 return False
-        return True
+            i += 1
+            j += 1
+        if i == len(s) and j == len(p):
+            return True
+        return False
 
 if __name__ == '__main__':
     unittest.main()
