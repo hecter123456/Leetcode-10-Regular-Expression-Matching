@@ -35,10 +35,15 @@ class unitest(unittest.TestCase):
         p = "a*"
         Ans = True
         self.assertEqual(Solution().isMatch(s,p),Ans);
-    def testStarNotSameLength(self):
+    def testStarDiffLength(self):
         s = "aab"
         p = "c*a*b"
         Ans = True
+        self.assertEqual(Solution().isMatch(s,p),Ans);
+    def testLongInput(self):
+        s = "abcd"
+        p = "d*"
+        Ans = False
         self.assertEqual(Solution().isMatch(s,p),Ans);
 
 class Solution():
@@ -58,6 +63,8 @@ class Solution():
                     i += 1
                 while j < len(p) and p[j] == temp:
                     j += 1
+            if j == len(p):
+                break
             if i < len(s):
                 if s[i] == "*" or s[i] == "." or (s[i] != p[j] and p[j] != "."):
                     return False
