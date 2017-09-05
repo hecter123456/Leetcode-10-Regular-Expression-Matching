@@ -45,35 +45,20 @@ class unitest(unittest.TestCase):
         p = "d*"
         Ans = False
         self.assertEqual(Solution().isMatch(s,p),Ans);
+    def testStarDot(self):
+        s = "ab"
+        p = ".*"
+        Ans = True
+        self.assertEqual(Solution().isMatch(s,p),Ans);
 
 class Solution():
     def isMatch(self, s, p):
-        s = s[::-1]
-        p = p[::-1]
-        i, j = 0, 0
-        while j < len(p):
-            while j < len(p) and p[j] == "*":
-                j += 1
-                temp = p[j]
-                if j == len(p):
-                    return False
-                if i < len(s) and (s[i] == "*" or s[i] != p[j]):
-                    return False
-                while i < len(s) and s[i] == temp:
-                    i += 1
-                while j < len(p) and p[j] == temp:
-                    j += 1
-            if j == len(p):
-                break
-            if i < len(s):
-                if s[i] == "*" or s[i] == "." or (s[i] != p[j] and p[j] != "."):
-                    return False
-            if i < len(s):
-                i += 1
-            j += 1
-        if i == len(s):
-            return True
-        return False
+        if (not p):
+            return not s
+        if (len(p) > 1 and p[1] == "*"):
+            return self.isMatch(s,p[2:]) or s and self.isMatch(s[1:],p) and (s[0] != "." and s[0] != "*" and (s[0] == p[0] or '.' == p[0]))
+        else:
+            return s and (s[0] != "." and s[0] != "*" and (s[0] == p[0] or '.' == p[0])) and self.isMatch(s[1:],p[1:])
 
 if __name__ == '__main__':
     unittest.main()
