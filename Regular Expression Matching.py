@@ -55,10 +55,19 @@ class Solution():
     def isMatch(self, s, p):
         if (not p):
             return not s
-        if (len(p) > 1 and p[1] == "*"):
-            return self.isMatch(s,p[2:]) or s and self.isMatch(s[1:],p) and (s[0] != "." and s[0] != "*" and (s[0] == p[0] or '.' == p[0]))
-        else:
-            return s and (s[0] != "." and s[0] != "*" and (s[0] == p[0] or '.' == p[0])) and self.isMatch(s[1:],p[1:])
+        if "*" and "." in s:
+            return False
+        table = [[False] * (len(p) + 1) for _ in range(len(s) + 1)]
+        table[0][0] = True
+        for j in range(2,len(p) + 1):
+            table[0][j] = p[j-1] == "*" and table[0][j-2]
+        for i in range(1,len(s)+1):
+            for j in range(1, len(p)+1):
+                if(p[j-1] == "*"):
+                    table[i][j] = table[i][j-2] or (s[i-1] == p[j-2] or p[j-2] == ".") and table[i-1][j]
+                else:
+                    table[i][j] = table[i-1][j-1] and (s[i-1] == p[j-1] or p[j-1] == ".")
+        return table[-1][-1]
 
 if __name__ == '__main__':
     unittest.main()
